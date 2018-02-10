@@ -82,7 +82,23 @@
                 'desc' => __( 'Add here the % retention, example 15', 'autonomos' ),
                 'id'   => 'autonomos_per_retention'
 									),
-            'autonomos_section_end' => array(
+			'autonomos_checkout_redirect'=> array(
+				'title'			=> __( 'Redirect to checkout', 'autonomos' ),
+				'type'			=> 'checkbox',
+				'label'			=> __( 'Redirect to checkout.', 'autonomos' ),
+				'default'		=> 'no',
+				'desc'			=> sprintf( __( 'Redirect directly to checkout when a user add a product', 'autonomos' ) ),
+				'id'			=> 'autonomos_checkout_redirect'
+									),
+			'autonomos_add_button_quantity'=> array(
+				'title'			=> __( 'Add quantity to shop page & archive', 'autonomos' ),
+				'type'			=> 'checkbox',
+				'label'			=> __( 'Add quantity to shop page & archive.', 'autonomos' ),
+				'default'		=> 'no',
+				'desc'			=> sprintf( __( 'Add quantity to shop page & archive so buyers can add product quantity from Shop Page & Archive Page', 'autonomos' ) ),
+				'id'			=> 'autonomos_add_button_quantity'
+									),
+			'autonomos_section_end' => array(
                  'type' => 'sectionend',
                  'id' => 'wc_settings_tab_autonomos_section_end'
 				 					)

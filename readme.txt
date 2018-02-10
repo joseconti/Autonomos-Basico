@@ -1,54 +1,81 @@
 === Autonomos ===
 Contributors: j.conti
-Tags: autonomos, woocommerce, irpf
+Tags: autonomos, woocommerce, irpf, autónomos
 Requires at least: 4.0
 Tested up to: 4.9.3
 Stable tag: 1.1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Autonomos facilita la vida a los autonomos.
+Autonomos makes viable the use of WooCommerce by Spanish autonomos.
 
 == Description ==
 
-Autonomos add the ability to substract the IRPF to Self Employed & Companies
+= Free version =
+
+Autonomos is a plugin developed thinking in spanisg Autonomos.
+
+What can you do with Autonomos?
+
+* Autonomos add the ability to substract the IRPF to Self Employed & Companies in the WooCommerce Checkout.
+* Autonomos add the  CIF / NIF / NIE field to the checkout page.
+* Autonomos Add the ability to add product quantity to shop page & archive so buyers can add product quantity from Shop Page & Archive Page
+
+= Premium version =
+
+* Compatible with Subscriptions WooCommerce extension.
+* Compatible with WooCommerce Rest API so any externar software can access to all data.
 
 == Installation ==
 
 
 1. Upload `autonomos` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
+3. Go to WooCommerce > Settings > Autonomos and configure it.
 
 == Frequently Asked Questions ==
 
 
 == Screenshots ==
 
+1. Autonomos Settings in WooCommerce
+2. Checkout with user selector CIF / NIF / NIE and IRPF
+3. Admin Order with IRPF
+
 
 == Changelog ==
 
+= 1.2.0 =
+
+* Added an option for redirect directly to checkout when a user add a product ( the shopping cart is skipped ).
+* Added an option for add product quantity to shop page & archive so buyers can add product quantity from Shop Page & Archive Page
+
 = 1.1.0.2 =
 
-* Eliminado sin querer un return que provoca un error en el checkout.
+* Unintentionally removed a return that caused a fatal error in the checkout.
 
 = 1.1.0.1 =
 
-* Directorio mal nombrado con lo que no se cargaba un template para Susbscriptions.
+* Fixed a directory name that caused that Subscription template not to load (premium version).
 
 = 1.1.0 =
-* Añadida compatibilidad con Subscriptions de WooCoommerce. Ahora las suscripciones muestran correctamente el IRPF en el checkout y en Mi cuenta de WooCommerce si hay una suscripción.
-* Los campos de DNI y tipo de usuario ahora se muestran en el el perfil de usurio de la adminsitración de WordPress.
+
+* Added compatibility with Subscriptions WooCommerce plugin (premium version).
+* CIF / NIF / NIE fields now are shown in the users profile in WordPress administration.
 
 = 1.0.2 =
-* Ahora ya se muestra el IRPF en los emails que envía WooCommerce, en los pedidos en Mi Cuenta del cliente y en el pedido en la administración de WooCommerce.
-* Añadido el campo CIF / NIF / NIE en al checkout.
-* Reordenados los campos del Checkout para que haya una coherencia.
+
+* Now, IRPF is shown in the emails send by WooCommerce, in My Account and WooCommerce Orders list
+* Added the field CIF / NIF / NIE in the checkout.
+* Checkout fields rearranged in the checkout page.
 
 = 1.0.1 =
-* Arreglo del calculo en el checkout debido a un bug en WooCommerce
+
+* Fixed the calculation in the checkout due to a bug in WooCommerce
 
 = 1.0 =
-* Primera versión pública.
+
+* First public release.
 
 
 

@@ -1,7 +1,9 @@
 <?php
-    if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+	if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-    $autonomos_is_active = get_option( 'autonomos_is_active', 1 );
+    $autonomos_is_active           = get_option( 'autonomos_is_active',           1 );
+    $autonomos_checkout_redirect   = get_option( 'autonomos_checkout_redirect',   1 );
+    $autonomos_add_button_quantity = get_option( 'autonomos_add_button_quantity', 1 );
 
     function autonomos_add_user_type_select() {
         if ( is_checkout() ) {
@@ -250,6 +252,29 @@
         return $totals;
     }
 
+	function autonomos_add_to_cart_redirect() {
+		global $woocommerce;
+		$checkout_url = wc_get_checkout_url();
+		return $checkout_url;
+	}
+
+	function autonomos_quantity_inputs_for_woocommerce_loop_add_to_cart_link( $html, $product ) {
+		if ( $product && $product->is_type( 'simple' ) && $product->is_purchasable() && $product->is_in_stock() && ! $product->is_sold_individually() ) {
+			$html = '<div class="autonomos">';
+			$html .= '<form action="' . esc_url( $product->add_to_cart_url() ) . '" class="cart" method="post" enctype="multipart/form-data">';
+			$html .= woocommerce_quantity_input( array(), $product, false );
+			$html .= '<button type="submit" class="button alt">' . esc_html( $product->add_to_cart_text() ) . '</button>';
+			$html .= '</form>';
+			$html .= '</div>';
+		}
+		return $html;
+	}
+
+	function autonomos_load_css_front(){
+		wp_register_style( 'autonomos-custom-css-front', AUTONOMOS_PLUGIN_URL . '/assets/css/autonomos.css', array(), AUTONOMOS_VERSION );
+		wp_enqueue_style(  'autonomos-custom-css-front' );
+	}
+
     if ( $autonomos_is_active == 'yes'  ) {
 
 		add_filter( 'woocommerce_customer_meta_fields',                   'autonomos_custom_admin_billing_fields'                             );
@@ -263,4 +288,13 @@
         add_action( 'woocommerce_admin_order_data_after_billing_address', 'autonomos_custom_checkout_field_display_admin_order_meta',	10, 1 );
         add_action( 'woocommerce_admin_order_items_after_shipping', 	  'autonomos_display_admin_order_irpf', 						10, 1 );
 
+        if ( $autonomos_checkout_redirect == 'yes'  ) {
+
+        	add_filter('woocommerce_add_to_cart_redirect', 'autonomos_add_to_cart_redirect');
+
+        }
+		 if ( $autonomos_add_button_quantity == 'yes'  ) {
+	        	add_filter( 'woocommerce_loop_add_to_cart_link', 'autonomos_quantity_inputs_for_woocommerce_loop_add_to_cart_link', 10, 2 );
+	        	add_action( 'wp_enqueue_scripts',                'autonomos_load_css_front'                                               );
+	     }
     }

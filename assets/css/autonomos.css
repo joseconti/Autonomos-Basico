@@ -1,0 +1,12 @@
+div.quantity{
+	float: left;
+	margin-right: .3em;
+	}
+
+input[type="number"]{
+	width: 3em;
+	}
+button.button{
+	width: auto;
+	padding: 11px;
+}
