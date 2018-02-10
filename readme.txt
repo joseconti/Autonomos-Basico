@@ -13,7 +13,7 @@ Autonomos makes viable the use of WooCommerce by Spanish autonomos.
 
 = Free version =
 
-Autonomos is a plugin developed thinking in spanisg Autonomos.
+Autonomos is a plugin developed thinking in spanish Autonomos.
 
 What can you do with Autonomos?
 
