@@ -52,13 +52,6 @@
 			}
 			return $new;
 		}
-		private static function is_valid_tax_class( $tax_class ) {
-		return ! empty( $tax_class ) && sanitize_title( $tax_class );
-	}
-
-		public function every_tax() {
-			return array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ), array( __CLASS__, 'is_valid_tax_class' ) );
-		}
 
 		// Seting page
 
