@@ -1,9 +1,10 @@
 <?php
 	if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-    $autonomos_is_active           = get_option( 'autonomos_is_active',           1 );
-    $autonomos_checkout_redirect   = get_option( 'autonomos_checkout_redirect',   1 );
-    $autonomos_add_button_quantity = get_option( 'autonomos_add_button_quantity', 1 );
+    $autonomos_is_active                        = get_option( 'autonomos_is_active',                       1 );
+    $autonomos_checkout_redirect                = get_option( 'autonomos_checkout_redirect',               1 );
+    $autonomos_add_button_quantity              = get_option( 'autonomos_add_button_quantity',             1 );
+    $autonomos_equivalence_surcharge_is_active  = get_option( 'autonomos_equivalence_surcharge_is_active', 1 );
 
     function autonomos_add_user_type_select() {
         if ( is_checkout() ) {
@@ -13,6 +14,9 @@
         jQuery(document).ready(function($) {
             $('.user-type-2').select2();
         });
+        jQuery(document).ready(function($) {
+            $('.equivalence-surcharge-2').select2();
+        });
         </script>
         <?php
         }
@@ -21,45 +25,76 @@
     // Our hooked in function - $fields is passed via the filter!
     function autonomos_override_checkout_fields( $show_fields ) {
 
+		$autonomos_equivalence_surcharge_is_active  = get_option( 'autonomos_equivalence_surcharge_is_active', 1 );
 
-        $show_fields['billing']['billing_user_type'] = array(
-        'label'       => __('You are?', 'autonomos'),
-        'placeholder' => _x('', 'placeholder', 'autonomos'),
-        'required'    => false,
-        'class'       => array( 'update_totals_on_change', 'user-type' ),
-        'input_class' => array( 'user-type-2' ),
-        'clear'       => false,
-        'type'        => 'select',
-        'options'     => array(
-              'private_user'    => __( 'Private User', 'autonomos' ),
-              'business'        => __( 'Business', 'autonomos' ),
-              'self-employed'   => __( 'Self Employed', 'autonomos' )
-            )
-        );
 
-        $show_fields['billing']['billing_user_dni'] = array(
-        'label'       => __( 'CIF / NIF / NIE', 'autonomos' ),
-        'placeholder' => _x( '', 'placeholder', 'autonomos' ),
-        'required'    => false,
-        'clear'       => false,
-        'type'        => 'text'
-        );
+	        $show_fields['billing']['billing_user_type'] = array(
+	        'label'       => __('You are?', 'autonomos'),
+	        'placeholder' => _x('', 'placeholder', 'autonomos'),
+	        'required'    => false,
+	        'class'       => array( 'update_totals_on_change', 'user-type' ),
+	        'input_class' => array( 'user-type-2' ),
+	        'clear'       => false,
+	        'type'        => 'select',
+	        'options'     => array(
+	              'private_user'    => __( 'Private User', 'autonomos' ),
+	              'business'        => __( 'Business', 'autonomos' ),
+	              'self-employed'   => __( 'Self Employed', 'autonomos' )
+	            )
+	        );
+
+	        if ( $autonomos_equivalence_surcharge_is_active == 'yes' ) {
+		        $show_fields['billing']['billing_equivalence_surcharge'] = array(
+		        'label'       => __('Add Equivalence Surcharge? Select No if you dont know what this is', 'autonomos'),
+		        'placeholder' => _x('', 'placeholder', 'autonomos'),
+		        'required'    => false,
+		        'class'       => array( 'update_totals_on_change', 'equivalence-surcharge' ),
+		        'input_class' => array( 'equivalence-surcharge-2' ),
+		        'clear'       => false,
+		        'type'        => 'select',
+		        'options'     => array(
+		              'private_user'    => __( 'No', 'autonomos' ),
+		              'business'        => __( 'Yes', 'autonomos' )
+		            )
+		        );
+		    }
+
+	        $show_fields['billing']['billing_user_dni'] = array(
+	        'label'       => __( 'CIF / NIF / NIE', 'autonomos' ),
+	        'placeholder' => _x( '', 'placeholder', 'autonomos' ),
+	        'required'    => false,
+	        'clear'       => false,
+	        'type'        => 'text'
+	        );
 
 		return $show_fields;
     }
 
 	function autonomos_custom_admin_billing_fields( $profileFieldArray ) {
 
+        $autonomos_equivalence_surcharge_is_active  = get_option( 'autonomos_equivalence_surcharge_is_active', 1 );
+
         $show_user_type = array(
 					'label'			=> __( 'User Type', 'autonomos' ),
 					'description'	=> '',
-					'type'        => 'select',
-			        'options'     => array(
+					'type'          => 'select',
+			        'options'       => array(
 			              'private_user'    => __( 'Private User', 'autonomos' ),
 			              'business'        => __( 'Business', 'autonomos' ),
 			              'self-employed'   => __( 'Self Employed', 'autonomos' )
 			            )
 					);
+		if ( $autonomos_equivalence_surcharge_is_active == 'yes' ) {
+			$show_equivalence_surcharge = array(
+						'label'			=> __( 'Equivalence Surcharg', 'autonomos' ),
+						'description'	=> '',
+						'type'          => 'select',
+				        'options'       => array(
+				              'private_user'    => __( 'Yes', 'autonomos' ),
+				              'business'        => __( 'No', 'autonomos' ),
+				            )
+						);
+		}
 
 		$show_dni = array(
 					'label'			=> __( 'CIF / NIF / NIE', 'autonomos' ),
@@ -67,6 +102,13 @@
 					);
 
 		$profileFieldArray['billing']['fields']['billing_user_type'] = $show_user_type;
+
+		if ( $autonomos_equivalence_surcharge_is_active == 'yes' ) {
+
+			$profileFieldArray['billing']['fields']['billing_equivalence_surcharge'] = $show_equivalence_surcharge;
+
+		}
+
 		$profileFieldArray['billing']['fields']['billing_user_dni'] = $show_dni;
 
 
