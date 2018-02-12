@@ -22,6 +22,7 @@
 		    add_filter( 'woocommerce_settings_tabs_array',        array( $this, 'add_settings_page' ), 20 );
 		    add_action( 'woocommerce_settings_' . $this->id,      array( $this, 'output' ) );
 		    add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
+			//add_action( 'add_tax', array( $this, 'add_tax' ) );
 
 		    // only add this if you need to add sections for your settings tab
 		    add_action( 'woocommerce_sections_' . $this->id,      array( $this, 'output_sections' ) );
@@ -37,6 +38,28 @@
 	    return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
 		}
 
+		public function add_tax() {
+			$tax_classes = WC_Tax::get_tax_classes();
+			$tax = array();
+			foreach ( $tax_classes as $class ) {
+				$new[] = array(
+						'title'			=> __( $class , 'autonomos' ),
+						'type'			=> 'text',
+						'css'			=> 'width:50px;',
+						'desc'			=> __( '% Equivalence Surcharge', 'autonomos' ),
+						'id'			=> 'autonomos_equivalence_surcharge_' . sanitize_title( $class ),
+					);
+			}
+			return $new;
+		}
+		private static function is_valid_tax_class( $tax_class ) {
+		return ! empty( $tax_class ) && sanitize_title( $tax_class );
+	}
+
+		public function every_tax() {
+			return array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ), array( __CLASS__, 'is_valid_tax_class' ) );
+		}
+
 		// Seting page
 
 		public function get_settings( $current_section = '' ) {
@@ -49,7 +72,7 @@
 				 * @since 1.0.0
 				 * @param array $settings Array of the plugin settings
 				 */
-				$settings = apply_filters( 'autonomos_equivalence_surcharge_settings', array(
+				$settings1 = apply_filters( 'autonomos_equivalence_surcharge_settings', array(
 
 					array(
 		                'name'     => __( 'Equivalence Surcharge', 'autonomos' ),
@@ -62,38 +85,18 @@
 						'type'			=> 'checkbox',
 						'label'			=> __( 'Activate Equivalence Surcharge.', 'autonomos' ),
 						'default'		=> 'no',
-						'desc'			=> sprintf( __( 'Activate Equivalence Surcharge', 'autonomos' ) ),
+						'desc'			=> __( 'Activate Equivalence Surcharge', 'autonomos' ),
 						'id'			=> 'autonomos_equivalence_surcharge_is_active'
 					),
-		            array(
-		                'name' => __( '% IRPF', 'autonomos' ),
-		                'type' => 'text',
-		                'css'      => 'width:50px;',
-		                'desc' => __( 'Add here the % retention, example 15', 'autonomos' ),
-		                'id'   => 'autonomos_per_retention_equivalence_surcharge'
-					),
-					array(
-						'title'			=> __( 'Redirect to checkout', 'autonomos' ),
-						'type'			=> 'checkbox',
-						'label'			=> __( 'Redirect to checkout.', 'autonomos' ),
-						'default'		=> 'no',
-						'desc'			=> sprintf( __( 'Redirect directly to checkout when a user add a product', 'autonomos' ) ),
-						'id'			=> 'autonomos_checkout_redirect_equivalence_surcharge'
-					),
-					array(
-						'title'			=> __( 'Add quantity to shop page & archive', 'autonomos' ),
-						'type'			=> 'checkbox',
-						'label'			=> __( 'Add quantity to shop page & archive.', 'autonomos' ),
-						'default'		=> 'no',
-						'desc'			=> sprintf( __( 'Add quantity to shop page & archive so buyers can add product quantity from Shop Page & Archive Page', 'autonomos' ) ),
-						'id'			=> 'autonomos_add_button_quantity_equivalence_surcharge'
-					),
+				));
+
+				$settings2 = apply_filters( 'autonomos_equivalence_surcharge_settings', $this->add_tax());
+				$settings3 = apply_filters( 'autonomos_equivalence_surcharge_settings', array(
 					array(
 		                 'type' => 'sectionend',
 		                 'id' => 'wc_settings_tab_autonomos_section_equivalence_surcharge_end'
-					)
-				));
-
+					)));
+				$settings = apply_filters( 'autonomos_equivalence_surcharge_settings', array_merge( $settings1, $settings2, $settings3 ));
 			} else {
 
 				/**
@@ -115,7 +118,7 @@
 						'type'			=> 'checkbox',
 						'label'			=> __( 'Activate Autonomos.', 'autonomos' ),
 						'default'		=> 'no',
-						'desc'			=> sprintf( __( 'Activate Autonomos', 'autonomos' ) ),
+						'desc'			=> __( 'Activate Autonomos', 'autonomos' ),
 						'id'			=> 'autonomos_is_active'
 					),
 		            array(
@@ -130,7 +133,7 @@
 						'type'			=> 'checkbox',
 						'label'			=> __( 'Redirect to checkout.', 'autonomos' ),
 						'default'		=> 'no',
-						'desc'			=> sprintf( __( 'Redirect directly to checkout when a user add a product', 'autonomos' ) ),
+						'desc'			=> __( 'Redirect directly to checkout when a user add a product', 'autonomos' ),
 						'id'			=> 'autonomos_checkout_redirect'
 					),
 					array(
@@ -138,7 +141,7 @@
 						'type'			=> 'checkbox',
 						'label'			=> __( 'Add quantity to shop page & archive.', 'autonomos' ),
 						'default'		=> 'no',
-						'desc'			=> sprintf( __( 'Add quantity to shop page & archive so buyers can add product quantity from Shop Page & Archive Page', 'autonomos' ) ),
+						'desc'			=> __( 'Add quantity to shop page & archive so buyers can add product quantity from Shop Page & Archive Page', 'autonomos' ),
 						'id'			=> 'autonomos_add_button_quantity'
 					),
 					array(
