@@ -46,7 +46,7 @@
 						'title'			=> __( $class , 'autonomos' ),
 						'type'			=> 'text',
 						'css'			=> 'width:50px;',
-						'desc'			=> __( '% Equivalence Surcharge', 'autonomos' ),
+						'desc'			=> __( '% Equivalence Surcharge, ex: 5.2 (use a dot for decimals)', 'autonomos' ),
 						'id'			=> 'autonomos_equivalence_surcharge_' . sanitize_title( $class ),
 					);
 			}
