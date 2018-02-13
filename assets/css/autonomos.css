@@ -1,12 +1,12 @@
-div.quantity{
+.autonomos .quantity{
 	float: left;
 	margin-right: .3em;
 	}
 
-input[type="number"]{
+.autonomos input[type="number"]{
 	width: 3em;
 	}
-button.button{
+.autonomos button.button{
 	width: auto;
 	padding: 11px;
 }
