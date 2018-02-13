@@ -4,7 +4,6 @@
     $autonomos_is_active                        = get_option( 'autonomos_is_active',                       1 );
     $autonomos_checkout_redirect                = get_option( 'autonomos_checkout_redirect',               1 );
     $autonomos_add_button_quantity              = get_option( 'autonomos_add_button_quantity',             1 );
-    $autonomos_equivalence_surcharge_is_active  = get_option( 'autonomos_equivalence_surcharge_is_active', 1 );
 
     function autonomos_add_user_type_select() {
         if ( is_checkout() ) {
@@ -53,8 +52,8 @@
 		        'clear'       => false,
 		        'type'        => 'select',
 		        'options'     => array(
-		              'private_user'    => __( 'No', 'autonomos' ),
-		              'business'        => __( 'Yes', 'autonomos' )
+		              'no'    => __( 'No', 'autonomos' ),
+		              'yes'   => __( 'Yes', 'autonomos' )
 		            )
 		        );
 		    }
@@ -90,8 +89,8 @@
 						'description'	=> '',
 						'type'          => 'select',
 				        'options'       => array(
-				              'private_user'    => __( 'Yes', 'autonomos' ),
-				              'business'        => __( 'No', 'autonomos' ),
+				              'yes'    => __( 'Yes', 'autonomos' ),
+				              'no'        => __( 'No', 'autonomos' ),
 				            )
 						);
 		}
@@ -171,6 +170,50 @@
                     </tr>
          <?php }
     }
+
+
+	function autonomos_add_equivalence_surcharge() {
+	    global $woocommerce;
+
+	    if ( is_admin() && ! defined( 'DOING_AJAX' ) )
+	        return;
+	    if ( isset( $_POST['post_data'] ) ) {
+	            parse_str( $_POST['post_data'], $post_data );
+	        } else {
+	            $post_data = $_POST; // fallback for final checkout (non-ajax)
+	        }
+	        //$taxes = WC_Tax::get_tax_class_slugs();
+
+		    //print_r($taxes);
+	    $country = array('ES');
+	    if ( ( in_array( WC()->customer->get_billing_country(), $country ) ) && ( isset( $post_data['billing_equivalence_surcharge'] ) && ( $post_data['billing_equivalence_surcharge'] == 'yes' ) ) ) {
+
+		    $taxes = WC_Tax::get_tax_class_slugs();
+
+		    foreach( $taxes as $tax ) {
+
+				$price       = 0;
+				$quantity    = 0;
+	            $items       = WC()->cart->get_cart();
+
+	            foreach( $items as $item => $values ) {
+
+					$_product    = wc_get_product( $values['data']->get_id() );
+		            $product_tax = get_post_meta( $values['product_id'] , '_tax_class', true );
+
+					if ( $tax == $product_tax ) {
+			            $price     = get_post_meta( $values['product_id'] , '_price', true );
+			            $quantity  = $quantity + $values['quantity'];
+			        }
+	            }
+	        $tax_re            = 'autonomos_equivalence_surcharge_' . $tax;
+	        $precent_surcharge = get_option( $tax_re, 1 );
+	        $price             = ( $price * $quantity) * ( $precent_surcharge / 100 );
+	        WC()->cart->add_fee( 'RE ' . $precent_surcharge . '%', $price, false, '' );
+	        //print_r($taxes);
+	        }
+	    }
+	}
 
     /**
      * Update the order meta with field value Add the IRPF
@@ -335,8 +378,14 @@
         	add_filter('woocommerce_add_to_cart_redirect', 'autonomos_add_to_cart_redirect');
 
         }
-		 if ( $autonomos_add_button_quantity == 'yes'  ) {
+		if ( $autonomos_add_button_quantity == 'yes'  ) {
 	        	add_filter( 'woocommerce_loop_add_to_cart_link', 'autonomos_quantity_inputs_for_woocommerce_loop_add_to_cart_link', 10, 2 );
 	        	add_action( 'wp_enqueue_scripts',                'autonomos_load_css_front'                                               );
 	     }
+
+	    $autonomos_equivalence_surcharge_is_active  = get_option( 'autonomos_equivalence_surcharge_is_active', 1 );
+
+	    if ( $autonomos_equivalence_surcharge_is_active == 'yes'  ) {
+		     add_action( 'woocommerce_cart_calculate_fees', 'autonomos_add_equivalence_surcharge' );
+		}
     }
