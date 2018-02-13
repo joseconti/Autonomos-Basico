@@ -1,6 +1,6 @@
 === Autonomos ===
 Contributors: j.conti
-Tags: autonomos, woocommerce, irpf, autónomos
+Tags: autonomos, woocommerce, irpf, autónomos, equivalence surcharge, Equivalence, equivalencia,  recargo de equivalencia, recargo,  recargo por equivalencia
 Requires at least: 4.0
 Tested up to: 4.9.3
 Stable tag: 1.2.0
@@ -19,7 +19,8 @@ What can you do with Autonomos?
 
 * Autonomos add the ability to substract the IRPF to Self Employed & Companies in the WooCommerce Checkout.
 * Autonomos add the CIF / NIF / NIE field to the checkout page.
-* Autonomos Add the ability to add product quantity to shop page & archive so buyers can add product quantity from Shop Page & Archive Page
+* Autonomos Add the ability to add product quantity to shop page & archive so buyers can add product quantity from Shop Page & Archive Page.
+* Autonomos Add Equivalence Surcharge.
 
 = Premium version =
 

@@ -3,7 +3,7 @@
     Plugin Name: Autonomos
     Plugin URI: https://www.joseconti.com
     Description: Plugins for spaniards "Autonomos"
-    Version: 1.3.0
+    Version: 1.3.0-rc2
     Author: Jose Conti
     Author URI: https://www.joseconti.com
     Tested up to: 4.9.3
@@ -13,7 +13,7 @@
     License URI: http://www.gnu.org/licenses/gpl-2.0.html
     */
 
-    define( 'AUTONOMOS_VERSION',        '1.3.0'                     );
+    define( 'AUTONOMOS_VERSION',        '1.3.0-rc2'                     );
     define( 'AUTONOMOS_PLUGIN_PATH',    plugin_dir_path( __FILE__ ) );
     define( 'AUTONOMOS_PLUGIN_URL',     plugin_dir_url( __FILE__ )  );
 
