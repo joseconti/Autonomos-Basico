@@ -206,11 +206,12 @@
 			            $quantity  = $quantity + $values['quantity'];
 			        }
 	            }
-	        $tax_re            = 'autonomos_equivalence_surcharge_' . $tax;
-	        $precent_surcharge = get_option( $tax_re, 1 );
-	        $price             = ( $price * $quantity) * ( $precent_surcharge / 100 );
-	        WC()->cart->add_fee( 'RE ' . $precent_surcharge . '%', $price, false, '' );
-	        //print_r($taxes);
+    	        $tax_re            = 'autonomos_equivalence_surcharge_' . $tax;
+    	        $precent_surcharge = get_option( $tax_re, 1 );
+    	        $price             = ( $price * $quantity) * ( $precent_surcharge / 100 );
+    	        if ( $price != '0' ) {
+    	            WC()->cart->add_fee( 'RE ' . $precent_surcharge . '%', $price, false, '' );
+    	        }
 	        }
 	    }
 	}
@@ -375,12 +376,12 @@
 
         if ( $autonomos_checkout_redirect == 'yes'  ) {
 
-        	add_filter('woocommerce_add_to_cart_redirect', 'autonomos_add_to_cart_redirect');
+        	add_filter( 'woocommerce_add_to_cart_redirect', 'autonomos_add_to_cart_redirect' );
 
         }
 		if ( $autonomos_add_button_quantity == 'yes'  ) {
 	        	add_filter( 'woocommerce_loop_add_to_cart_link', 'autonomos_quantity_inputs_for_woocommerce_loop_add_to_cart_link', 10, 2 );
-	        	add_action( 'wp_enqueue_scripts',                'autonomos_load_css_front'                                               );
+	        	add_action( 'wp_enqueue_scripts',                'autonomos_load_css_front',                                       999    );
 	     }
 
 	    $autonomos_equivalence_surcharge_is_active  = get_option( 'autonomos_equivalence_surcharge_is_active', 1 );
