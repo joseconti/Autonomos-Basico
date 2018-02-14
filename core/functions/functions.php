@@ -241,9 +241,10 @@
 
     function autonomos_custom_checkout_field_display_admin_order_meta( $order ){
 
+
 	    $user_type = get_post_meta( $order->get_id(), '_billing_user_type', true );
 
-	    if ( $user_type == private_user ) {
+	    if ( $user_type == 'private_user' ) {
 		    $user_type = __( 'Private User', 'autonomos');
 	    } elseif ( $user_type == business ) {
 		    $user_type = __( 'Business', 'autonomos');
