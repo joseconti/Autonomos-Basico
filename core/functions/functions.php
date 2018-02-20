@@ -318,7 +318,7 @@
 
     function autonomos_woocommerce_get_order_item_totals( $totals, $order ) {
 
-        $irpf_order = get_post_meta( $order->id, '_billing_order_irpf', true );
+        $irpf_order = get_post_meta( $order->get_id(), '_billing_order_irpf', true );
 
         if ( empty( $irpf_order ) ) return $totals;
 
