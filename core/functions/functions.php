@@ -47,6 +47,7 @@ function autonomos_override_checkout_fields( $show_fields ) {
 			'input_class' => array( 'equivalence-surcharge-2' ),
 			'clear'       => false,
 			'type'        => 'select',
+			'default'     => 'No',
 			'options'     => array(
 				'no'  => __( 'No', 'autonomos' ),
 				'yes' => __( 'Yes', 'autonomos' ),
