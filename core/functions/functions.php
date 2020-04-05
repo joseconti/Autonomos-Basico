@@ -128,7 +128,12 @@ function autonomos_show_irpf_checkout() {
 		return;
 	}
 	$country   = array( 'ES' );
-	$surcharge = ( $woocommerce->cart->cart_contents_total + $woocommerce->cart->shipping_total ) * $percentage;
+	
+	if ( WC()->cart->get_subtotal() !==  $woocommerce->cart->cart_contents_total ) {
+		$surcharge = ( (float)WC()->cart->get_subtotal() + (float)$woocommerce->cart->shipping_total - (float)$woocommerce->cart->get_cart_discount_total ) * (float)$percentage;
+	} else {
+		$surcharge = ( (float)$woocommerce->cart->cart_contents_total + (float)$woocommerce->cart->shipping_total - (float)$woocommerce->cart->get_cart_discount_total ) * (float)$percentage;
+	}
 	if ( isset( $_POST['post_data'] ) ) {
 		parse_str( $_POST['post_data'], $post_data );
 	} else {
@@ -185,18 +190,50 @@ function autonomos_add_equivalence_surcharge() {
 * Update the order meta with field value Add the IRPF
 */
 
+function autonomos_calculate_coupon_amount_used( $order_id, $order_subtotal, $shipping_cost ) {
+	
+	$coupon_amount = 0;
+	$order         = new WC_Order( $order_id );
+	$coupons       = $order->get_used_coupons();
+	
+	if ( ! empty( $coupons ) ) {
+		foreach( $coupons as $coupon ) {
+			$log = new WC_Logger();
+			$log->add( 'autonomos-lite', __( 'cupon: ', 'seur' ) . $coupon );
+			$coupon          = new WC_Coupon( $coupon );
+			$discount        = $coupon->get_amount();
+			$log->add( 'autonomos-lite', __( '$discount: ', 'seur' ) . $discount );
+			$disc_type       = $coupon->discount_type;
+			$log->add( 'autonomos-lite', __( '$disc_type: ', 'seur' ) . $disc_type );
+			if ( 'percent' === $disc_type ) {
+				$coupon_amount   = (int)$coupon_amount + ( ( ( (int)$order_subtotal + (int)$shipping_cost ) * (int)$discount ) / 100 );
+				$log->add( 'autonomos-lite', __( '$coupon_amount: ', 'seur' ) . $coupon_amount );
+			}
+			
+			if ( 'fixed_cart' === $disc_type ) {
+				$coupon_amount   = (int)$coupon_amount + (int)$discount;
+				$log->add( 'autonomos-lite', __( '$coupon_amount: ', 'seur' ) . $coupon_amount );
+			}
+		}
+		return $coupon_amount;
+	} else {
+		return $coupon_amount;
+	}
+}
+
 function autonomos_custom_checkout_irpf_field_update_order_meta( $order_id ) {
 
 	$country   = get_post_meta( $order_id, '_billing_country', true );
 	$user_type = get_post_meta( $order_id, '_billing_user_type', true );
 
 	if ( 'ES' === $country && ( 'business' === $user_type || 'self-employed' === $user_type ) ) {
-		$shipping_cost       = get_post_meta( $order_id, '_order_shipping', true );
-		$autonomos_retention = get_option( 'autonomos_per_retention', 1 );
-		$percentage          = -1 * ( intval( $autonomos_retention ) / 100 );
-		$order               = wc_get_order( $order_id );
-		$order_subtotal      = $order->get_subtotal();
-		$surcharge           = ( $order_subtotal + $shipping_cost ) * $percentage;
+		$shipping_cost          = get_post_meta( $order_id, '_order_shipping', true );
+		$autonomos_retention    = get_option( 'autonomos_per_retention', 1 );
+		$percentage             = -1 * ( intval( $autonomos_retention ) / 100 );
+		$order                  = wc_get_order( $order_id );
+		$order_subtotal         = $order->get_subtotal();
+		$order_discound_coupons = autonomos_calculate_coupon_amount_used ( $order_id, $order_subtotal, $shipping_cost );
+		$surcharge           = ( (int)$order_subtotal + (int)$shipping_cost - (int)$order_discound_coupons ) * (int)$percentage;
 		update_post_meta( $order_id, '_billing_order_irpf', number_format( round( $surcharge, 2 ), 2 ) );
 	}
 }
