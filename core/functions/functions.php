@@ -199,20 +199,20 @@ function autonomos_calculate_coupon_amount_used( $order_id, $order_subtotal, $sh
 	if ( ! empty( $coupons ) ) {
 		foreach( $coupons as $coupon ) {
 			$log = new WC_Logger();
-			$log->add( 'autonomos-lite', __( 'cupon: ', 'seur' ) . $coupon );
+			$log->add( 'autonomos-lite', __( 'cupon: ', 'autonomos' ) . $coupon );
 			$coupon          = new WC_Coupon( $coupon );
 			$discount        = $coupon->get_amount();
-			$log->add( 'autonomos-lite', __( '$discount: ', 'seur' ) . $discount );
+			$log->add( 'autonomos-lite', __( '$discount: ', 'autonomos' ) . $discount );
 			$disc_type       = $coupon->discount_type;
-			$log->add( 'autonomos-lite', __( '$disc_type: ', 'seur' ) . $disc_type );
+			$log->add( 'autonomos-lite', __( '$disc_type: ', 'autonomos' ) . $disc_type );
 			if ( 'percent' === $disc_type ) {
 				$coupon_amount   = (int)$coupon_amount + ( ( ( (int)$order_subtotal + (int)$shipping_cost ) * (int)$discount ) / 100 );
-				$log->add( 'autonomos-lite', __( '$coupon_amount: ', 'seur' ) . $coupon_amount );
+				$log->add( 'autonomos-lite', __( '$coupon_amount: ', 'autonomos' ) . $coupon_amount );
 			}
 			
 			if ( 'fixed_cart' === $disc_type ) {
 				$coupon_amount   = (int)$coupon_amount + (int)$discount;
-				$log->add( 'autonomos-lite', __( '$coupon_amount: ', 'seur' ) . $coupon_amount );
+				$log->add( 'autonomos-lite', __( '$coupon_amount: ', 'autonomos' ) . $coupon_amount );
 			}
 		}
 		return $coupon_amount;
@@ -308,6 +308,14 @@ function autonomos_checkout_priority_fields( $fields ) {
 	$fields['billing']['billing_user_dni']['priority']  = 30;
 	return $fields;
 }
+
+function autonomos_chck_dni_field() {
+	// Check if set, if its not set add an error.
+	if ( $_POST['billing_user_type'] && 'private_user' !== $_POST['billing_user_type'] ) {
+		wc_add_notice( __( 'Please enter your CIF / NIF / NIE.', 'autonomos' ), 'error' );
+	}
+}
+add_action('woocommerce_checkout_process', 'autonomos_chck_dni_field');
 
 function autonomos_woocommerce_get_order_item_totals( $totals, $order ) {
 
