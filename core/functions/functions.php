@@ -312,10 +312,12 @@ function autonomos_checkout_priority_fields( $fields ) {
 function autonomos_chck_dni_field() {
 	// Check if set, if its not set add an error.
 	if ( $_POST['billing_user_type'] && 'private_user' !== $_POST['billing_user_type'] ) {
-		wc_add_notice( __( 'Please enter your CIF / NIF / NIE.', 'autonomos' ), 'error' );
+		if ( empty( $_POST['billing_user_dni'] ) ) {
+			wc_add_notice( __( 'Please enter your CIF / NIF / NIE.', 'autonomos' ), 'error' );
+		}
 	}
 }
-add_action('woocommerce_checkout_process', 'autonomos_chck_dni_field');
+add_action( 'woocommerce_checkout_process', 'autonomos_chck_dni_field' );
 
 function autonomos_woocommerce_get_order_item_totals( $totals, $order ) {
 

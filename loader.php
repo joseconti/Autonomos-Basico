@@ -3,7 +3,7 @@
 Plugin Name: Autonomos
 Plugin URI: https://www.joseconti.com
 Description: Plugins for Spanish Autonomos. Autonomos add tools to WooCommerce for Autonomos
-Version: 1.4.0
+Version: 1.4.1
 Author: Jose Conti
 Author URI: https://www.joseconti.com
 Tested up to: 5.4
@@ -14,7 +14,7 @@ WC tested up to: 4.2
 License: GPLv2 only
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
-define( 'AUTONOMOS_VERSION', '1.4.0' );
+define( 'AUTONOMOS_VERSION', '1.4.1' );
 define( 'AUTONOMOS_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'AUTONOMOS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
