@@ -3,7 +3,7 @@ Contributors: j.conti
 Tags: autonomos, woocommerce, irpf, autónomos, equivalence surcharge, Equivalence, equivalencia,  recargo de equivalencia, recargo,  recargo por equivalencia
 Requires at least: 4.0
 Tested up to: 5.4
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 WC requires at least: 3.0
 WC tested up to: 4.2
 License: GPLv2 or later
@@ -48,6 +48,11 @@ What can you do with Autonomos?
 
 
 == Changelog ==
+
+= 1.4.2 =
+
+* FIXED: Fixed an error saving IRPF
+
 
 = 1.4.1 =
 

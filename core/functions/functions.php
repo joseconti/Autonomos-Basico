@@ -206,12 +206,12 @@ function autonomos_calculate_coupon_amount_used( $order_id, $order_subtotal, $sh
 			$disc_type       = $coupon->discount_type;
 			$log->add( 'autonomos-lite', __( '$disc_type: ', 'autonomos' ) . $disc_type );
 			if ( 'percent' === $disc_type ) {
-				$coupon_amount   = (int)$coupon_amount + ( ( ( (int)$order_subtotal + (int)$shipping_cost ) * (int)$discount ) / 100 );
+				$coupon_amount   = (float)$coupon_amount + ( ( ( (float)$order_subtotal + (float)$shipping_cost ) * (float)$discount ) / 100 );
 				$log->add( 'autonomos-lite', __( '$coupon_amount: ', 'autonomos' ) . $coupon_amount );
 			}
 			
 			if ( 'fixed_cart' === $disc_type ) {
-				$coupon_amount   = (int)$coupon_amount + (int)$discount;
+				$coupon_amount   = (float)$coupon_amount + (float)$discount;
 				$log->add( 'autonomos-lite', __( '$coupon_amount: ', 'autonomos' ) . $coupon_amount );
 			}
 		}
@@ -233,7 +233,7 @@ function autonomos_custom_checkout_irpf_field_update_order_meta( $order_id ) {
 		$order                  = wc_get_order( $order_id );
 		$order_subtotal         = $order->get_subtotal();
 		$order_discound_coupons = autonomos_calculate_coupon_amount_used ( $order_id, $order_subtotal, $shipping_cost );
-		$surcharge           = ( (int)$order_subtotal + (int)$shipping_cost - (int)$order_discound_coupons ) * (int)$percentage;
+		$surcharge           = ( (float)$order_subtotal + (float)$shipping_cost - (float)$order_discound_coupons ) * (float)$percentage;
 		update_post_meta( $order_id, '_billing_order_irpf', number_format( round( $surcharge, 2 ), 2 ) );
 	}
 }
