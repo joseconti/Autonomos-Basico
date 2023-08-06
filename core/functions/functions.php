@@ -223,24 +223,24 @@ function autonomos_calculate_coupon_amount_used( $order_id, $order_subtotal, $sh
 
 function autonomos_custom_checkout_irpf_field_update_order_meta( $order_id ) {
 
-	$country   = get_post_meta( $order_id, '_billing_country', true );
-	$user_type = get_post_meta( $order_id, '_billing_user_type', true );
+	$country   = WCAutoL()->get_order_meta( $order_id, '_billing_country' );
+	$user_type = WCAutoL()->get_order_meta( $order_id, '_billing_user_type' );
 
 	if ( 'ES' === $country && ( 'business' === $user_type || 'self-employed' === $user_type ) ) {
-		$shipping_cost          = get_post_meta( $order_id, '_order_shipping', true );
+		$shipping_cost          = WCAutoL()->get_order_meta( $order_id, '_order_shipping' );
 		$autonomos_retention    = get_option( 'autonomos_per_retention', 1 );
 		$percentage             = -1 * ( intval( $autonomos_retention ) / 100 );
 		$order                  = wc_get_order( $order_id );
 		$order_subtotal         = $order->get_subtotal();
 		$order_discound_coupons = autonomos_calculate_coupon_amount_used ( $order_id, $order_subtotal, $shipping_cost );
-		$surcharge           = ( (float)$order_subtotal + (float)$shipping_cost - (float)$order_discound_coupons ) * (float)$percentage;
-		update_post_meta( $order_id, '_billing_order_irpf', number_format( round( $surcharge, 2 ), 2 ) );
+		$surcharge              = ( (float)$order_subtotal + (float)$shipping_cost - (float)$order_discound_coupons ) * (float)$percentage;
+		WCAutoL()->update_order_meta( $order_id, '_billing_order_irpf', number_format( round( $surcharge, 2 ), 2 ) );
 	}
 }
 
 function autonomos_custom_checkout_field_display_admin_order_meta( $order ) {
 
-	$user_type = get_post_meta( $order->get_id(), '_billing_user_type', true );
+	$user_type = WCAutoL()->get_order_meta( $order->get_id(), '_billing_user_type' );
 
 	if ( 'private_user' === $user_type ) {
 		$user_type = __( 'Private User', 'autonomos' );
@@ -253,7 +253,7 @@ function autonomos_custom_checkout_field_display_admin_order_meta( $order ) {
 }
 
 function autonomos_display_admin_order_irpf( $order_id ) {
-	$irpf_order          = get_post_meta( $order_id, '_billing_order_irpf', true );
+	$irpf_order          = WCAutoL()->get_order_meta( $order_id, '_billing_order_irpf' );
 	$autonomos_retention = get_option( 'autonomos_per_retention', 1 );
 	if ( empty( $irpf_order ) ) {
 		return;
@@ -321,7 +321,7 @@ add_action( 'woocommerce_checkout_process', 'autonomos_chck_dni_field' );
 
 function autonomos_woocommerce_get_order_item_totals( $totals, $order ) {
 
-	$irpf_order = get_post_meta( $order->get_id(), '_billing_order_irpf', true );
+	$irpf_order = WCAutoL()->get_order_meta( $order->get_id(), '_billing_order_irpf' );
 
 	if ( empty( $irpf_order ) ) {
 		return $totals;
