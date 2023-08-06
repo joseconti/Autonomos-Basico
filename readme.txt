@@ -2,10 +2,10 @@
 Contributors: j.conti
 Tags: autonomos, woocommerce, irpf, autónomos, equivalence surcharge, Equivalence, equivalencia,  recargo de equivalencia, recargo,  recargo por equivalencia
 Requires at least: 4.0
-Tested up to: 5.4
-Stable tag: 1.4.2
-WC requires at least: 3.0
-WC tested up to: 4.2
+Tested up to: 6.3
+Stable tag: 2.0.0
+WC requires at least: 7.2
+WC tested up to: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
