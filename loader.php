@@ -20,6 +20,14 @@ define( 'AUTONOMOS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 add_action( 'plugins_loaded', 'autonomos_init', 11 );
 
+/**
+ * Global functions WCAutoL
+ */
+function WCAutoL() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
+	require_once AUTONOMOS_PLUGIN_PATH . 'classes/class-wc-autonomos-lite-global.php'; // Global class for global functions.
+	return new WC_Autonomos_Lite_Global();
+}
+
 function autonomos_init() {
 	load_plugin_textdomain( 'autonomos', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
