@@ -49,6 +49,12 @@ What can you do with Autonomos?
 
 == Changelog ==
 
+= 2.0.0 =
+
+* NEW: Compatibility with HPOS.
+* NEW: Declared compatibility with WordPress 6.3.
+* NEW: Declared compatibility with WooCommerce 8.0
+
 = 1.4.2 =
 
 * FIXED: Fixed an error saving IRPF
