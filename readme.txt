@@ -28,6 +28,10 @@ What can you do with Autonomos?
 
 * Compatible with Subscriptions WooCommerce extension.
 * Compatible with WooCommerce Rest API so any externar software can access to all data.
+* Comptible with PDF Invoices & Packing Slips for WooCommerce
+* Compatible with [FacturaScripts](https://facturascripts.com/) Automatically create users and invoices in FacturaScripts from purchases in WooCommerce.
+
+More infortaion [here](https://redsys.joseconti.com/product/woocommerce-autonomos-premium/)
 
 == Installation ==
 
