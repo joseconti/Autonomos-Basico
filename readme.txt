@@ -31,7 +31,7 @@ What can you do with Autonomos?
 * Comptible with PDF Invoices & Packing Slips for WooCommerce
 * Compatible with [FacturaScripts](https://facturascripts.com/) Automatically create users and invoices in FacturaScripts from purchases in WooCommerce.
 
-More infortaion [here](https://redsys.joseconti.com/product/woocommerce-autonomos-premium/)
+More information of Premium version [here](https://redsys.joseconti.com/product/woocommerce-autonomos-premium/)
 
 == Installation ==
 
